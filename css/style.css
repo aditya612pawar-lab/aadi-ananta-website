@@ -1715,4 +1715,74 @@ footer {
     .options-header h2 {
         font-size: 1.8rem;
     }
+
+}
+/* =========================
+   MOBILE FIX – HERO & NAV
+   ========================= */
+@media (max-width: 768px) {
+
+  /* HERO HEIGHT FIX */
+  .hero {
+    height: auto;
+    min-height: 100vh;
+    padding-top: 120px;
+    padding-bottom: 60px;
+  }
+
+  /* HERO LOGO FIX */
+  .hero-logo {
+    margin: 0 auto 20px;
+    max-width: 220px;
+  }
+
+  /* HERO TEXT */
+  .tagline {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+
+  .subtext {
+    font-size: 0.8rem;
+    letter-spacing: 2px;
+  }
+
+  /* BUTTON STACK FIX */
+  .hero-buttons {
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 24px;
+  }
+
+  .hero-buttons .btn {
+    width: 90%;
+    max-width: 320px;
+  }
+
+  /* NAVBAR MENU FIX */
+  .nav-menu {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  .nav-link {
+    font-size: 0.85rem;
+  }
+
+  /* DISABLE HOVER DROPDOWNS ON MOBILE */
+  .dropdown-menu,
+  .submenu {
+    position: static;
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+    box-shadow: none;
+    background: transparent;
+    padding: 0;
+  }
+
+  .dropdown-link {
+    padding: 0.4rem 0;
+  }
 }
