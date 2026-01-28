@@ -413,14 +413,14 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Wellness Retreat',
             desc: 'Transformative Healing Programs',
             options: [
-                { name: 'Body Pain Treatment', link: 'retreat/body-pain.html' },
-                { name: 'Disease Treatment', link: 'retreat/disease-treatment.html' },
-                { name: 'Stress Management', link: 'retreat/stress-management.html' },
-                { name: 'Panchakarma Detox', link: 'retreat/panchakarma.html' },
-                { name: 'Ayurvedic Healing', link: 'retreat/ayurveda.html' },
-                { name: 'Homeopathy Care', link: 'retreat/homeopathy.html' },
-                { name: 'Naturopathy', link: 'retreat/naturopathy.html' },
-                { name: 'Yoga & Meditation', link: 'retreat/yoga.html' }
+                { name: 'Body Pain Treatment', link: 'retreats/body-pain.html' },
+                { name: 'Disease Treatment', link: 'retreats/disease-treatment.html' },
+                { name: 'Stress Management', link: 'retreats/stress-management.html' },
+                { name: 'Panchakarma Detox', link: 'retreats/panchakarma.html' },
+                { name: 'Ayurvedic Healing', link: 'retreats/ayurveda.html' },
+                { name: 'Homeopathy Care', link: 'retreats/homeopathy.html' },
+                { name: 'Naturopathy', link: 'retreats/naturopathy.html' },
+                { name: 'Yoga & Meditation', link: 'retreats/yoga.html' }
             ]
         },
         'venues': {
@@ -533,5 +533,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
 
 
