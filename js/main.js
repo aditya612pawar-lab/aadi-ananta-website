@@ -403,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
             title: 'Wellness Living',
             desc: 'Luxury Residences Tailored for Harmony',
             options: [
-                { name: 'Luxury Villas', link: 'wellness-villas.html' },
+                { name: 'Luxury Villas', link: 'wellness/villas.html' },
                 { name: 'Wellness Sanctuary Suites', link: 'wellness-suites.html' },
                 { name: 'Heritage Cottages', link: 'wellness-cottages.html' },
                 { name: 'Zen Tree Houses', link: 'wellness-treehouse.html' }
@@ -533,3 +533,4 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
