@@ -404,60 +404,60 @@ document.addEventListener('DOMContentLoaded', () => {
             desc: 'Luxury Residences Tailored for Harmony',
             options: [
                 { name: 'Luxury Villas', link: 'wellness/villas.html' },
-                { name: 'Wellness Sanctuary Suites', link: 'wellness-suites.html' },
-                { name: 'Heritage Cottages', link: 'wellness-cottages.html' },
-                { name: 'Zen Tree Houses', link: 'wellness-treehouse.html' }
+                { name: 'Wellness Sanctuary Suites', link: 'wellness/suites.html' },
+                { name: 'Heritage Cottages', link: 'wellness/cottages.html' },
+                { name: 'Zen Tree Houses', link: 'wellness/treehouse.html' }
             ]
         },
         'retreat': {
             title: 'Wellness Retreat',
             desc: 'Transformative Healing Programs',
             options: [
-                { name: 'Body Pain Treatment', link: 'retreat-body-pain.html' },
-                { name: 'Disease Treatment', link: 'retreat-disease-treatment.html' },
-                { name: 'Stress Management', link: 'retreat-stress-management.html' },
-                { name: 'Panchakarma Detox', link: 'retreat-panchakarma.html' },
-                { name: 'Ayurvedic Healing', link: 'retreat-ayurveda.html' },
-                { name: 'Homeopathy Care', link: 'retreat-homeopathy.html' },
-                { name: 'Naturopathy', link: 'retreat-naturopathy.html' },
-                { name: 'Yoga & Meditation', link: 'retreat-yoga.html' }
+                { name: 'Body Pain Treatment', link: 'retreat/body-pain.html' },
+                { name: 'Disease Treatment', link: 'retreat/disease-treatment.html' },
+                { name: 'Stress Management', link: 'retreat/stress-management.html' },
+                { name: 'Panchakarma Detox', link: 'retreat/panchakarma.html' },
+                { name: 'Ayurvedic Healing', link: 'retreat/ayurveda.html' },
+                { name: 'Homeopathy Care', link: 'retreat/homeopathy.html' },
+                { name: 'Naturopathy', link: 'retreat/naturopathy.html' },
+                { name: 'Yoga & Meditation', link: 'retreat/yoga.html' }
             ]
         },
         'venues': {
             title: 'Venues & Hospitality',
             desc: 'Exquisite Spaces for Every Occasion',
             options: [
-                { name: 'Meeting Spaces', link: 'venues-meeting.html' },
-                { name: 'Corporate Parties', link: 'venues-party.html' },
-                { name: 'Conferences', link: 'venues-conference.html' },
-                { name: 'Destination Weddings', link: 'venues-wedding.html' },
-                { name: 'Music Concerts', link: 'venues-concert.html' },
-                { name: 'Private Celebrations', link: 'venues-private-party.html' }
+                { name: 'Meeting Spaces', link: 'venues/meeting.html' },
+                { name: 'Corporate Parties', link: 'venues/party.html' },
+                { name: 'Conferences', link: 'venues/conference.html' },
+                { name: 'Destination Weddings', link: 'venues/wedding.html' },
+                { name: 'Music Concerts', link: 'venues/concert.html' },
+                { name: 'Private Celebrations', link: 'venues/private-party.html' }
             ]
         },
         'reality': {
             title: 'Rich Returns Reality',
             desc: 'Invest in a Sustainable Future',
             options: [
-                { name: 'Residential Projects', link: 'reality-residential.html' },
-                { name: 'Commercial Projects', link: 'reality-commercial.html' }
+                { name: 'Residential Projects', link: 'reality/residential.html' },
+                { name: 'Commercial Projects', link: 'reality/commercial.html' }
             ]
         },
         'sports': {
             title: 'Sports Activity',
             desc: 'Olympic Standard Excellence',
             options: [
-                { name: 'Olympic Arena', link: 'sports-arena.html' },
-                { name: 'Sports Training', link: 'sports-training.html' }
+                { name: 'Olympic Arena', link: 'sports/arena.html' },
+                { name: 'Sports Training', link: 'sports/training.html' }
             ]
         },
         'education': {
             title: 'Education',
             desc: 'Nurturing Minds with Vedic Wisdom',
             options: [
-                { name: 'Residential Gurukul', link: 'education-gurukul.html' },
-                { name: 'Future-Ready Values', link: 'education-future-ready.html' },
-                { name: 'Art & Culture Classes', link: 'education-art.html' }
+                { name: 'Residential Gurukul', link: 'education/gurukul.html' },
+                { name: 'Future-Ready Values', link: 'education/future-ready.html' },
+                { name: 'Art & Culture Classes', link: 'education/art.html' }
             ]
         }
     };
@@ -533,4 +533,5 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
+
 
