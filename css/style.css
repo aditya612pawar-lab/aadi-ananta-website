@@ -149,6 +149,13 @@ img {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    width: 100%;
+    /* Push to full width */
+    max-width: 1550px;
+    /* Increased to allow more room */
+    margin: 0 auto;
+    padding: 0 40px;
+    /* Adding some edge padding for safety */
 }
 
 .logo {
@@ -157,10 +164,13 @@ img {
     letter-spacing: 1px;
     display: flex;
     align-items: center;
+    flex-shrink: 0;
+    /* Prevent logo from shrinking */
 }
 
 .navbar-logo {
-    height: 75px;
+    height: 95px;
+    /* Further increased */
     width: auto;
     transition: all 0.5s ease;
     /* Entrance Animation Initial State */
@@ -172,7 +182,8 @@ img {
 }
 
 .navbar.scrolled .navbar-logo {
-    height: 60px;
+    height: 70px;
+    /* Further increased */
 }
 
 @keyframes logoEntrance {
@@ -194,14 +205,10 @@ img {
     }
 }
 
-
-
-
-
 .nav-menu {
     display: flex;
-    gap: 1.2rem;
-    /* Reduced from 2rem to accommodate more items */
+    gap: clamp(0.4rem, 1vw, 1rem);
+    /* Even tighter gap */
     align-items: center;
 }
 
@@ -211,8 +218,8 @@ img {
 
 .nav-link {
     color: var(--color-white);
-    font-size: 0.9rem;
-    /* Slightly smaller */
+    font-size: clamp(0.9rem, 1vw, 1rem);
+    /* Restored to better scale */
     font-weight: 400;
     opacity: 0.9;
     white-space: nowrap;
@@ -529,8 +536,9 @@ img {
 }
 
 .services-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
     gap: var(--spacing-md);
 }
 
@@ -538,8 +546,12 @@ img {
     position: relative;
     border-radius: 12px;
     overflow: hidden;
-    height: 350px;
-    /* group property was invalid/typo, removing it */
+    height: 380px;
+    /* Slightly taller */
+    flex: 0 1 380px;
+    /* Fixed width basis for consistency */
+    max-width: 100%;
+    /* Safety for mobile */
     cursor: pointer;
 }
 
@@ -1103,11 +1115,13 @@ footer {
 /* Wellness Pages Sub-header Styles */
 .page-header {
     position: relative;
-    height: 60vh;
-    min-height: 400px;
+    height: 100vh;
+    min-height: 600px;
     background-size: cover;
     background-position: center;
-    background-attachment: fixed;
+    background-repeat: no-repeat;
+    animation: zoomEffect 20s infinite alternate;
+    overflow: hidden;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1188,8 +1202,8 @@ footer {
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .page-header {
-        height: 50vh;
-        min-height: 300px;
+        height: 80vh;
+        min-height: 400px;
     }
 
     .page-header-content h1 {
@@ -1359,8 +1373,8 @@ footer {
     font-weight: 300;
     font-family: var(--font-heading);
     white-space: nowrap;
-    margin-top: 1rem;
-    /* Added positive margin for proper spacing */
+    margin-top: -160px;
+    /* Pulled up by another 50px */
     position: relative;
     z-index: 2;
     opacity: 0;
@@ -1894,7 +1908,6 @@ footer {
     .about-grid,
     .footer-grid,
     .vision-content,
-    .services-grid,
     .features-grid {
         grid-template-columns: 1fr;
         width: 100%;
