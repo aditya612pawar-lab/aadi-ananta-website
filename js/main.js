@@ -500,6 +500,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 { name: 'Future-Ready Values', link: 'education/future-ready.html' },
                 { name: 'Art & Culture Classes', link: 'education/art.html' }
             ]
+        },
+        'seva': {
+            title: 'Seva Programs',
+            desc: 'Compassion in Action for a Vedic Future',
+            options: [
+                { name: 'Gaushala', link: 'gaushala.html' },
+                { name: 'Organic Farm', link: 'organic-farm.html' },
+                { name: 'Horse Stable', link: 'horse-stable.html' },
+                { name: 'Forest Safari', link: 'forest-safari.html' }
+            ]
         }
     };
 
