@@ -1873,7 +1873,12 @@ footer {
         /* Ensure it doesn't overlap text below */
         display: block;
     }
-
+   .loader-status {
+        margin-top: -60px !important;
+        /* Adjusted for mobile to prevent overlap */
+        font-size: 1.2rem !important;
+        letter-spacing: 4px !important;
+    }
     .loader-text-row span {
         font-size: 2rem !important;
         /* Smaller loader text */
@@ -1948,4 +1953,5 @@ footer {
     .loader-logo {
         width: 80%;
     }
+
 }
