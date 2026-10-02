@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Events Gallery | Aadi Ananta</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+        rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <!-- Main CSS -->
+    <link rel="stylesheet" href="css/style.css?v=12">
+    <style>
+        .gallery-main-tabs {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 2.5rem;
+        }
+
+        .tab-btn {
+            background: rgba(255, 255, 255, 0.06);
+            color: #d1d5db;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 12px 32px;
+            border-radius: 35px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .tab-btn:hover {
+            background: rgba(255, 255, 255, 0.12);
+            color: #ffffff;
+            border-color: var(--color-accent, #c9a050);
+            transform: translateY(-2px);
+        }
+
+        .tab-btn.active {
+            background: var(--color-primary, #2d5a27);
+            color: #ffffff;
+            border-color: var(--color-primary, #2d5a27);
+            box-shadow: 0 6px 20px rgba(45, 90, 39, 0.45);
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: rgba(255, 255, 255, 0.03);
+            aspect-ratio: 4 / 3;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s ease;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.08);
+        }
+
+        /* Lightbox Modal */
+        .lightbox-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            background: rgba(0, 0, 0, 0.92);
+            backdrop-filter: blur(10px);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .lightbox-modal.active {
+            display: flex;
+        }
+
+        .lightbox-content {
+            position: relative;
+            max-width: 90vw;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .lightbox-img {
+            max-width: 100%;
+            max-height: 75vh;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+        }
+
+        .lightbox-caption {
+            margin-top: 15px;
+            color: #ffffff;
+            font-size: 1.1rem;
+            font-family: 'Playfair Display', serif;
+            text-align: center;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: -45px;
+            right: 0;
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .lightbox-close:hover {
+            color: var(--color-accent, #c9a050);
+        }
+
+        .lightbox-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: #ffffff;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .lightbox-nav:hover {
+            background: var(--color-primary, #2d5a27);
+        }
+
+        .lightbox-prev {
+            left: -60px;
+        }
+
+        .lightbox-next {
+            right: -60px;
+        }
+
+        @media (max-width: 768px) {
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)) !important;
+                gap: 16px !important;
+            }
+            .gallery-item {
+                min-height: 220px;
+            }
+            .lightbox-prev {
+                left: 10px;
+            }
+            .lightbox-next {
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            .gallery-main-tabs {
+                gap: 10px !important;
+                padding: 0 10px;
+            }
+            .tab-btn {
+                padding: 10px 20px !important;
+                font-size: 0.95rem !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Preloader -->
+    <div id="preloader">
+        <div class="loader-content">
+            <div class="loader-brand-wrapper">
+                <img src="assets/common/logo.png" alt="Aadi Ananta" class="loader-logo">
+                <span class="loader-status">COMING SOON</span>
+            </div>
+            <p class="loader-location">AT MUMBAI</p>
+        </div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/common/logo.png" alt="Aadi Ananta Logo" class="navbar-logo">
+            </a>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <a href="index.html#wellness-living" class="nav-link">Wellness Living <i class="fa-solid fa-chevron-down"
+                            style="font-size: 0.7em; margin-left: 5px;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item"><a href="wellness/villas.html" class="dropdown-link">Villas</a></li>
+                        <li class="dropdown-item"><a href="wellness/suites.html" class="dropdown-link">Suites</a></li>
+                        <li class="dropdown-item"><a href="wellness/cottages.html" class="dropdown-link">Cottages</a></li>
+                        <li class="dropdown-item"><a href="wellness/treehouse.html" class="dropdown-link">Tree House</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#wellness-retreat" class="nav-link">Wellness Retreat <i class="fa-solid fa-chevron-down"
+                            style="font-size: 0.7em; margin-left: 5px;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a href="#" class="dropdown-link">Medical Program <i class="fa-solid fa-chevron-right"
+                                    style="font-size: 0.7em;"></i></a>
+                            <ul class="submenu">
+                                <li><a href="retreats/body-pain.html" class="dropdown-link">Body Pain Treatment</a></li>
+                                <li><a href="retreats/disease-treatment.html" class="dropdown-link">Disease Treatment</a></li>
+                                <li><a href="retreats/stress-management.html" class="dropdown-link">Stress Management</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-item">
+                            <a href="#" class="dropdown-link">Ayurvedic Program <i class="fa-solid fa-chevron-right"
+                                    style="font-size: 0.7em;"></i></a>
+                            <ul class="submenu">
+                                <li><a href="retreats/panchakarma.html" class="dropdown-link">Panchakarma</a></li>
+                                <li><a href="retreats/ayurveda.html" class="dropdown-link">Ayurveda</a></li>
+                                <li><a href="retreats/homeopathy.html" class="dropdown-link">Ayurveda/Homeopathy</a></li>
+                                <li><a href="retreats/naturopathy.html" class="dropdown-link">Naturopathy</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-item"><a href="retreats/yoga.html" class="dropdown-link">Yoga & Meditation Center</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#venues" class="nav-link">Venues & Hospitality <i class="fa-solid fa-chevron-down"
+                            style="font-size: 0.7em; margin-left: 5px;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a href="#" class="dropdown-link">Corporate Events <i class="fa-solid fa-chevron-right"
+                                    style="font-size: 0.7em;"></i></a>
+                            <ul class="submenu">
+                                <li><a href="venues/meeting.html" class="dropdown-link">Meeting</a></li>
+                                <li><a href="venues/party.html" class="dropdown-link">Corporate Party</a></li>
+                                <li><a href="venues/conference.html" class="dropdown-link">Conference</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-item"><a href="venues/wedding.html" class="dropdown-link">Destination Wedding</a></li>
+                        <li class="dropdown-item"><a href="venues/concert.html" class="dropdown-link">Music Concert</a></li>
+                        <li class="dropdown-item"><a href="venues/private-party.html" class="dropdown-link">Private Party</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#reality" class="nav-link">Rich Returns Reality <i class="fa-solid fa-chevron-down"
+                            style="font-size: 0.7em; margin-left: 5px;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item"><a href="reality/residential.html" class="dropdown-link">Residential Project</a></li>
+                        <li class="dropdown-item"><a href="reality/commercial.html" class="dropdown-link">Commercial Project</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#sports" class="nav-link">Sports Activity <i class="fa-solid fa-chevron-down"
+                            style="font-size: 0.7em; margin-left: 5px;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item"><a href="sports/arena.html" class="dropdown-link">Olympic Standard Sports Arena</a></li>
+                        <li class="dropdown-item"><a href="sports/training.html" class="dropdown-link">Adult & Youth Sports Training</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#education" class="nav-link">Education <i class="fa-solid fa-chevron-down"
+                            style="font-size: 0.7em; margin-left: 5px;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item">
+                            <a href="#" class="dropdown-link">Residential Gurukul <i class="fa-solid fa-chevron-right"
+                                    style="font-size: 0.7em;"></i></a>
+                            <ul class="submenu submenu-left">
+                                <li><a href="education/future-ready.html" class="dropdown-link">Future-Ready Education Rooted in Vedic Values</a></li>
+                            </ul>
+                        </li>
+                        <li class="dropdown-item"><a href="education/art.html" class="dropdown-link">Art and Culture</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html#seva-programs" class="nav-link">Seva Programs <i class="fa-solid fa-chevron-down"
+                            style="font-size: 0.7em; margin-left: 5px;"></i></a>
+                    <ul class="dropdown-menu">
+                        <li class="dropdown-item"><a href="seva-programs/gaushala.html" class="dropdown-link">Gaushala</a></li>
+                        <li class="dropdown-item"><a href="seva-programs/organic-farm.html" class="dropdown-link">Organic Farm</a></li>
+                        <li class="dropdown-item"><a href="seva-programs/horse-stable.html" class="dropdown-link">Horse Stable</a></li>
+                        <li class="dropdown-item"><a href="seva-programs/forest-safari.html" class="dropdown-link">Forest Safari</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item"><a href="projects.html" class="nav-link">Projects</a></li>
+                <li class="nav-item"><a href="gallery.html" class="nav-link active">Gallery</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Page Header -->
+    <header class="page-header" style="background-image: url('assets/gallery/gallery_hero.jpg');">
+        <div class="page-header-content">
+            <h1>Events & Photo Gallery</h1>
+        </div>
+    </header>
+
+    <!-- Gallery Section -->
+    <section class="section-padding" style="background-color: var(--color-bg, #0d1712);">
+        <div class="container">
+
+            <!-- Gallery Main Tabs -->
+            <div class="gallery-main-tabs reveal">
+                <button class="tab-btn active" data-type="events">
+                    <i class="fa-solid fa-calendar-days"></i> Events
+                </button>
+                <button class="tab-btn" data-type="site-view">
+                    <i class="fa-solid fa-compass"></i> Site View
+                </button>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="gallery-grid reveal" id="gallery-grid">
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event1.jpeg" data-title="Music & Cultural Night - Image 1">
+                    <img src="assets/gallery/event1/music event1.jpeg" alt="Music & Cultural Night - Image 1" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event10.jpeg" data-title="Music & Cultural Night - Image 2">
+                    <img src="assets/gallery/event1/music event10.jpeg" alt="Music & Cultural Night - Image 2" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event2.jpeg" data-title="Music & Cultural Night - Image 3">
+                    <img src="assets/gallery/event1/music event2.jpeg" alt="Music & Cultural Night - Image 3" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event3.jpeg" data-title="Music & Cultural Night - Image 4">
+                    <img src="assets/gallery/event1/music event3.jpeg" alt="Music & Cultural Night - Image 4" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event4.jpeg" data-title="Music & Cultural Night - Image 5">
+                    <img src="assets/gallery/event1/music event4.jpeg" alt="Music & Cultural Night - Image 5" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event5.jpeg" data-title="Music & Cultural Night - Image 6">
+                    <img src="assets/gallery/event1/music event5.jpeg" alt="Music & Cultural Night - Image 6" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event6.jpeg" data-title="Music & Cultural Night - Image 7">
+                    <img src="assets/gallery/event1/music event6.jpeg" alt="Music & Cultural Night - Image 7" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event7.jpeg" data-title="Music & Cultural Night - Image 8">
+                    <img src="assets/gallery/event1/music event7.jpeg" alt="Music & Cultural Night - Image 8" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event8.jpeg" data-title="Music & Cultural Night - Image 9">
+                    <img src="assets/gallery/event1/music event8.jpeg" alt="Music & Cultural Night - Image 9" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event1/music event9.jpeg" data-title="Music & Cultural Night - Image 10">
+                    <img src="assets/gallery/event1/music event9.jpeg" alt="Music & Cultural Night - Image 10" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event2/DSC_4157.JPG.jpeg" data-title="Vedic Celebrations - Image 1">
+                    <img src="assets/gallery/event2/DSC_4157.JPG.jpeg" alt="Vedic Celebrations - Image 1" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event2/DSC_4158.JPG.jpeg" data-title="Vedic Celebrations - Image 2">
+                    <img src="assets/gallery/event2/DSC_4158.JPG.jpeg" alt="Vedic Celebrations - Image 2" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event2/DSC_4159.JPG.jpeg" data-title="Vedic Celebrations - Image 3">
+                    <img src="assets/gallery/event2/DSC_4159.JPG.jpeg" alt="Vedic Celebrations - Image 3" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event2/DSC_4161.JPG.jpeg" data-title="Vedic Celebrations - Image 4">
+                    <img src="assets/gallery/event2/DSC_4161.JPG.jpeg" alt="Vedic Celebrations - Image 4" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event2/DSC_4233.JPG.jpeg" data-title="Vedic Celebrations - Image 5">
+                    <img src="assets/gallery/event2/DSC_4233.JPG.jpeg" alt="Vedic Celebrations - Image 5" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event2/DSC_4254.JPG.jpeg" data-title="Vedic Celebrations - Image 6">
+                    <img src="assets/gallery/event2/DSC_4254.JPG.jpeg" alt="Vedic Celebrations - Image 6" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event2/DSC_4262.JPG.jpeg" data-title="Vedic Celebrations - Image 7">
+                    <img src="assets/gallery/event2/DSC_4262.JPG.jpeg" alt="Vedic Celebrations - Image 7" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event2/DSC_4271.JPG.jpeg" data-title="Vedic Celebrations - Image 8">
+                    <img src="assets/gallery/event2/DSC_4271.JPG.jpeg" alt="Vedic Celebrations - Image 8" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_02.jpg" data-title="Township Glimpses - Image 1">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_02.jpg" alt="Township Glimpses - Image 1" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_03.jpg" data-title="Township Glimpses - Image 2">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_03.jpg" alt="Township Glimpses - Image 2" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_04.jpg" data-title="Township Glimpses - Image 3">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_04.jpg" alt="Township Glimpses - Image 3" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_05.jpg" data-title="Township Glimpses - Image 4">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_05.jpg" alt="Township Glimpses - Image 4" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_06.jpg" data-title="Township Glimpses - Image 5">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_06.jpg" alt="Township Glimpses - Image 5" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_07.jpg" data-title="Township Glimpses - Image 6">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_07.jpg" alt="Township Glimpses - Image 6" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_10.jpg" data-title="Township Glimpses - Image 7">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_10.jpg" alt="Township Glimpses - Image 7" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_11.jpg" data-title="Township Glimpses - Image 8">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_11.jpg" alt="Township Glimpses - Image 8" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_12.jpg" data-title="Township Glimpses - Image 9">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_12.jpg" alt="Township Glimpses - Image 9" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_14.jpg" data-title="Township Glimpses - Image 10">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_14.jpg" alt="Township Glimpses - Image 10" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_15.jpg" data-title="Township Glimpses - Image 11">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_15.jpg" alt="Township Glimpses - Image 11" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_17.jpg" data-title="Township Glimpses - Image 12">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_17.jpg" alt="Township Glimpses - Image 12" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_18.jpg" data-title="Township Glimpses - Image 13">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_18.jpg" alt="Township Glimpses - Image 13" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_19.jpg" data-title="Township Glimpses - Image 14">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_19.jpg" alt="Township Glimpses - Image 14" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="events" data-src="assets/gallery/event3/Aadi_Ananta_more_20.jpg" data-title="Township Glimpses - Image 15">
+                    <img src="assets/gallery/event3/Aadi_Ananta_more_20.jpg" alt="Township Glimpses - Image 15" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_layout_plan.jpg" data-title="Site Layout Plan" style="display: none;">
+                    <img src="assets/gallery/site-view/site_layout_plan.jpg" alt="Site Layout Plan" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_villa_render_19.jpg" data-title="Vedic Villa Elevation - Front View" style="display: none;">
+                    <img src="assets/gallery/site-view/site_villa_render_19.jpg" alt="Vedic Villa Elevation - Front View" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_villa_render_20.jpg" data-title="Vedic Villa Elevation - Side Garden" style="display: none;">
+                    <img src="assets/gallery/site-view/site_villa_render_20.jpg" alt="Vedic Villa Elevation - Side Garden" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_villa_render_21.jpg" data-title="Vedic Villa Elevation - Courtyard & Balcony" style="display: none;">
+                    <img src="assets/gallery/site-view/site_villa_render_21.jpg" alt="Vedic Villa Elevation - Courtyard & Balcony" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_mango_4.jpg" data-title="Site View - Image 1" style="display: none;">
+                    <img src="assets/gallery/site-view/site_mango_4.jpg" alt="Site View - Image 1" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_mango_5.jpg" data-title="Site View - Image 2" style="display: none;">
+                    <img src="assets/gallery/site-view/site_mango_5.jpg" alt="Site View - Image 2" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_path_3.jpg" data-title="Site View - Image 3" style="display: none;">
+                    <img src="assets/gallery/site-view/site_path_3.jpg" alt="Site View - Image 3" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_road_1.jpg" data-title="Site View - Image 4" style="display: none;">
+                    <img src="assets/gallery/site-view/site_road_1.jpg" alt="Site View - Image 4" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_view_4.jpg" data-title="Site View - Image 8" style="display: none;">
+                    <img src="assets/gallery/site-view/site_view_4.jpg" alt="Site View - Image 8" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_view_5.jpg" data-title="Site View - Image 9" style="display: none;">
+                    <img src="assets/gallery/site-view/site_view_5.jpg" alt="Site View - Image 9" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_collage_10.jpg" data-title="On Site View" style="display: none;">
+                    <img src="assets/gallery/site-view/site_collage_10.jpg" alt="On Site View" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_well_excavation_11.jpg" data-title="Site Well Excavation" style="display: none;">
+                    <img src="assets/gallery/site-view/site_well_excavation_11.jpg" alt="Site Well Excavation" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_orchard_12.jpg" data-title="Site Mango Orchard" style="display: none;">
+                    <img src="assets/gallery/site-view/site_orchard_12.jpg" alt="Site Mango Orchard" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_mango_tree_13.jpg" data-title="Site Mango Trees" style="display: none;">
+                    <img src="assets/gallery/site-view/site_mango_tree_13.jpg" alt="Site Mango Trees" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_excavator_14.jpg" data-title="Site Development & Earthwork" style="display: none;">
+                    <img src="assets/gallery/site-view/site_excavator_14.jpg" alt="Site Development & Earthwork" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_ritual_15.jpg" data-title="Site Bhoomi Pujan" style="display: none;">
+                    <img src="assets/gallery/site-view/site_ritual_15.jpg" alt="Site Bhoomi Pujan" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_fencing_16.jpg" data-title="Site Boundary & Fencing" style="display: none;">
+                    <img src="assets/gallery/site-view/site_fencing_16.jpg" alt="Site Boundary & Fencing" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_well_digging_17.jpg" data-title="Well Excavation Work" style="display: none;">
+                    <img src="assets/gallery/site-view/site_well_digging_17.jpg" alt="Well Excavation Work" loading="lazy">
+                </div>
+                <div class="gallery-item" data-type="site-view" data-src="assets/gallery/site-view/site_water_pond_18.jpg" data-title="Natural Water Reservoir" style="display: none;">
+                    <img src="assets/gallery/site-view/site_water_pond_18.jpg" alt="Natural Water Reservoir" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lightbox Modal -->
+    <div class="lightbox-modal" id="lightbox-modal">
+        <div class="lightbox-content">
+            <button class="lightbox-close" id="lightbox-close">&times;</button>
+            <button class="lightbox-nav lightbox-prev" id="lightbox-prev"><i class="fa-solid fa-chevron-left"></i></button>
+            <button class="lightbox-nav lightbox-next" id="lightbox-next"><i class="fa-solid fa-chevron-right"></i></button>
+            <img src="" alt="" class="lightbox-img" id="lightbox-img">
+            <div class="lightbox-caption" id="lightbox-caption"></div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <h2>Aadi Ananta</h2>
+                    <p>A luxury Vedic wellness township where people live, heal, learn, celebrate, and grow in harmony with nature.</p>
+                    <div class="social-icons">
+                        <a href="#" class="social-icon"><i class="fa-brands fa-facebook-f"></i></a>
+                        <a href="https://www.instagram.com/theaadiananta?igsh=cGpyazR6MXJnaTZ4" class="social-icon" target="_blank"><i class="fa-brands fa-instagram"></i></a>
+                        <a href="https://linkedin.com/in/aadi-ananta-200949289" class="social-icon" target="_blank"><i class="fa-brands fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Living & Healing</h3>
+                    <ul class="footer-links">
+                        <li><a href="wellness/villas.html">Luxury Villas</a></li>
+                        <li><a href="wellness/suites.html">Wellness Suites</a></li>
+                        <li><a href="retreats/ayurveda.html">Ayurvedic Programs</a></li>
+                        <li><a href="retreats/yoga.html">Yoga & Meditation</a></li>
+                        <li><a href="index.html#seva-programs">Seva Programs</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Experience</h3>
+                    <ul class="footer-links">
+                        <li><a href="venues/wedding.html">Destination Weddings</a></li>
+                        <li><a href="venues/meeting.html">Corporate Events</a></li>
+                        <li><a href="sports/arena.html">Sports Arena</a></li>
+                        <li><a href="gallery.html">Photo Gallery</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-col">
+                    <h3>Contact Us</h3>
+                    <ul class="footer-links">
+                        <li><a href="#"><i class="fa-solid fa-phone"></i> +91 7045 800 900</a></li>
+                        <li><a href="#"><i class="fa-solid fa-envelope"></i> sales@aadiananta.in</a></li>
+                        <li><a href="#"><i class="fa-solid fa-location-dot"></i> Navi Mumbai, India</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="copyright">
+                <p>&copy; 2026 Aadi Ananta. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Main JS -->
+    <script src="js/main.js?v=12"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            const galleryItems = Array.from(document.querySelectorAll('.gallery-item'));
+
+            // Tab Switching Logic
+            tabBtns.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    tabBtns.forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+
+                    const targetType = btn.getAttribute('data-type');
+                    galleryItems.forEach(item => {
+                        if (item.getAttribute('data-type') === targetType) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Lightbox logic
+            const modal = document.getElementById('lightbox-modal');
+            const modalImg = document.getElementById('lightbox-img');
+            const modalCaption = document.getElementById('lightbox-caption');
+            const closeBtn = document.getElementById('lightbox-close');
+            const prevBtn = document.getElementById('lightbox-prev');
+            const nextBtn = document.getElementById('lightbox-next');
+
+            let visibleItems = [];
+            let currentIndex = 0;
+
+            function updateVisibleItems() {
+                visibleItems = galleryItems.filter(item => item.style.display !== 'none');
+            }
+
+            function openLightbox(index) {
+                updateVisibleItems();
+                if (visibleItems.length === 0) return;
+                
+                currentIndex = index;
+                const item = visibleItems[currentIndex];
+                modalImg.src = item.getAttribute('data-src');
+                modalCaption.textContent = item.getAttribute('data-title');
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            galleryItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    updateVisibleItems();
+                    const index = visibleItems.indexOf(item);
+                    if (index !== -1) openLightbox(index);
+                });
+            });
+
+            function closeLightbox() {
+                modal.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            closeBtn.addEventListener('click', closeLightbox);
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) closeLightbox();
+            });
+
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (visibleItems.length === 0) return;
+                currentIndex = (currentIndex - 1 + visibleItems.length) % visibleItems.length;
+                const item = visibleItems[currentIndex];
+                modalImg.src = item.getAttribute('data-src');
+                modalCaption.textContent = item.getAttribute('data-title');
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if (visibleItems.length === 0) return;
+                currentIndex = (currentIndex + 1) % visibleItems.length;
+                const item = visibleItems[currentIndex];
+                modalImg.src = item.getAttribute('data-src');
+                modalCaption.textContent = item.getAttribute('data-title');
+            });
+
+            document.addEventListener('keydown', (e) => {
+                if (!modal.classList.contains('active')) return;
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') prevBtn.click();
+                if (e.key === 'ArrowRight') nextBtn.click();
+            });
+        });
+    </script>
+</body>
+
+</html>
